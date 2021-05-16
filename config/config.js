@@ -1,0 +1,17 @@
+var protocol = location.protocol;
+CI = {};
+CI.properties = {};
+CI.properties.roadsURL = protocol + "//maps.sa.gov.au/arcgis/rest/services/BaseMaps/StreetMapCased_wmas/MapServer";
+CI.properties.imageryURL = protocol + "//maps.sa.gov.au/mapproxy/wmts/PublicMosaic/webmercator_20";
+CI.properties.imageryLabelsURL = protocol + "//maps.sa.gov.au/arcgis/rest/services/BaseMaps/StreetLabels_wmas/MapServer";
+CI.properties.topographicURL = protocol + "//maps.sa.gov.au/arcgis/rest/services/BaseMaps/Topographic_wmas/MapServer";
+CI.properties.DataDynamicUrl = protocol + "//maps.sa.gov.au/arcgis/rest/services/DPTIExtTransport/CycleInsteadDisplayData/MapServer/";
+CI.properties.networkUrl = protocol + "//maps.sa.gov.au/arcgis/rest/services/DPTIExtTransport/CycleInsteadBikeandRoadsNetwork/NAServer/";
+CI.properties.AddressGeocoderUrl = protocol + "//maps.sa.gov.au/arcgis/rest/services/Locators/OTPCompositeLocator/GeocodeServer/findAddressCandidates?";
+CI.properties.reverseGeocoderUrl = protocol + "//maps.sa.gov.au/arcgis/rest/services/Locators/SAGAF_PLUS/GeocodeServer";
+//CI.properties.printUrl = protocol + "//maps.sa.gov.au/arcgis/rest/services/DPTIExtLandServices/PropertyLocationBrowserPrint/GPServer/Export Web Map";
+CI.properties.printUrl = protocol + "//location.sa.gov.au/arcgis/rest/services/DPTIExtLandServices/PropertyLocationBrowserPrint/GPServer/Export Web Map";
+CI.properties.GeometryUrl = protocol + "//maps.sa.gov.au/ArcGIS/rest/services/Geometry/GeometryServer";
+CI.properties.proxyUrl = '/ESRI_JSAPI_proxy/proxy.ashx?';
+CI.properties.defaultZoomLevel = 16;
+CI.properties.IdentifyLayers = [2, 3, 4, 5];

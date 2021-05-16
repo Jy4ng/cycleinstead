@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+        <title>Cycle Instead</title>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="196x196" href="images/CIlogoSquare.png">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <script src="js/ie8Polyfill.js"></script>
+        <![endif]-->
+        <link type="text/css" href="css/site.css" rel="stylesheet" />
+        <!--<link href="http://maps.ha.sa.gov.au/Global/Kendo/2014_1_318/styles/kendo.common-bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+        <link href="//maps.sa.gov.au/Global/Kendo/2014_1_318/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+        <link href="//maps.sa.gov.au/Global/Kendo/2014_1_318/styles/kendo.Bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="//maps.sa.gov.au/global/kendo/2013_2_918/styles/kendo.dataviz.min.css" rel="stylesheet" />
+        <link href="//maps.sa.gov.au/global/kendo/2013_2_918/styles/kendo.dataviz.Bootstrap.min.css" rel="stylesheet" />
+        <link type="text/css" href="css/ci_bootstrap.min.css" rel="stylesheet" />
+        <!--link type="text/css" rel="stylesheet" href="//maps.sa.gov.au/arcgis_js_api/library/3.8/3.8compact/js/esri/css/esri.css"-->
+        <link rel="stylesheet" href="https://apps.geohub.sa.gov.au/ArcGISJSApis/3.29/3.29/esri/css/esri.css">
+        <link href="css/fonts/fontello/fontello.css" rel="stylesheet" type="text/css"/>
+        <link href="css/fonts/fontello/animation.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="mapDiv" style="height:100%">
+            <div id="searchStopsDiv" class="container-fluid col-xs-8 col-sm-8 col-md-7 col-lg-6">
+                <div class="row tiles">
+                    <div class="col-xs-12 col-sm-10 col-md-9 col-lg-8" id="searchWidgetDiv">
+                    </div>
+                </div>
+                <div class="row tiles">
+                    <div class="col-xs-12 col-sm-10 col-md-9 col-lg-8" id="locationListDiv">
+                    </div>
+                </div>
+                <div class="row tiles">
+                    <div class="col-xs-12 col-sm-10 col-md-9 col-lg-8" id="routePanelDiv">
+                    </div>
+                </div>
+                <div class="row tiles">
+                    <div class="col-xs-12 col-sm-10 col-md-9 col-lg-8" id="alertListDiv">
+                    </div>
+                </div>
+            </div>
+            <div id="mapNavigatorDiv" class="col-xs-1 col-sm-1 col-md-5 col-lg-4">
+                <div id="mapNavigatorInner" class="pull-right">
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-sm btn-primary navButton" onclick="map.setLevel(map.getLevel()+1)"><span class="km-icon-plus" title="Zoom In"></span></a>
+                        <a type="button" class="btn btn-sm btn-primary navButton" onclick="map.setLevel(map.getLevel()-1)"><span class="km-icon-minus" title="Zoom Out"></span></a>
+                        <a type="button" id="locateButton" data-bootstro-content="Use this to find your location" data-bootstro-placement="bottom" class="btn btn-sm btn-primary navButton"><span class="km-icon-target" title="Show my location"></span></a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="#favouritesPageSlide" id="favouritesButton" data-bootstro-content="Use this to manage your favourite locations and rides" data-bootstro-placement="bottom" type="button" class="btn btn-primary btn-sm navButton"><span class="km-icon-star" title="Favourites"></span></a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="#optionsPageSlide" id="optionsButton" data-bootstro-content="Use this to manage what is showing on your map" data-bootstro-placement="bottom" type="button" class="btn btn-primary btn-sm navButton"><span class="km-icon-menu" title="Options"></span></a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="#helpPageSlide" id="helpButton" type="button" class="btn btn-primary btn-sm navButton"><span class="km-icon-help" title="Help"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-md" id="cycleInsteadLogoDiv">
+                <img id="saGovlogo" src="images/saGovlogoSmall.png" alt="Government of South Australia"><img id="CIlogo" class="pull-right" src="images/CIlogo.png" alt="Cycle Instead logo">
+            </div>
+        </div><!-- mapDiv -->
+        <div id="pageSlide">
+        </div>
+        <!-- pageslide -->
+        <div id="loader">
+            <div id="loaderInner" style="direction:ltr;">
+                <div>
+                    <img id="splashImage" src="images/cycleInsteadSplash.png" />
+                </div>
+                <div>
+                    <h3>Loading Cycle Instead </h3>
+                    <div id="loadingContainer" class="progress progress-striped active">
+                        <div id="loadingBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="browserWarning" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">You may want to update your browser</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="browserWarningText" style="width:300px;">
+                            You're running a version of Internet Explorer that we no long support. To get the best out of Cycle Instead you'll need to update to a newer version or use another browser.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                        <a href="http://whatbrowser.org" type="button" class="btn btn-primary">Update your browser</a>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--div id="TDUCompetition" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Win a Signed Young Rider Jersey - TDU</h4>
+                    </div>
+                    <div class="modal-body">
+                        <img src="images/TDUCompetition.png" style="width:360px;" alt="Win a signed Young Riders Jersey - image"/>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="http://www.dpti.sa.gov.au/communityprograms/programs/cycle_instead/ci_subscription_services" type="button" target="_blank" class="btn btn-primary">Enter Here</a>
+						<a type="button" id="TDUCompDontShow" class="btn btn-default" data-dismiss="modal" data-click="alert('click')">Don't Show Again</a>
+                    </div>
+                </div>
+            </div>
+        </div-->
+        <!-- /.modal -->
+        <div id="invalidRouteModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Unable to calculate route</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="moreInfoText">
+                            Your locations may be too far away from the routing network or your routing options may be too restrictive. Please try modifying your route options (e.g. Maximum gradient and Travel on Unsealed surfaces) or try another route.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <div id="stopOutsideInfoModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Location can't be added</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="moreInfoText">
+                            The Cycle Instead Journey Planner could not locate your stop within our network. Please try again by adding a stop in metropolitan Adelaide.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div id="helpVideoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Help Video" aria-hidden="true">
+            <div class="modal-dialog">
+                <div id="ciHelpVideo">
+                    <iframe width="560" height="315" src="" frameborder="0" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- /.modal -->
+        <form target="_blank" id="PDFForm" action="//maps.sa.gov.au/HTML2DOC/convert/" method="post">
+            <textarea type="hidden" id="reportHtml" name="htmlData">
+            </textarea>
+            <input type="hidden" name="name" value="CycleInsteadJP" />
+        </form>
+        <script type="text/javascript">
+            if(location.protocol==="http:" && location.host.toLowerCase()==='maps.sa.gov.au') location.replace("https://"+location.host+location.pathname);
+            if (!window.console) {
+                console = {
+                    log: function(){
+                    }
+                };
+            }
+            dojoConfig = {
+                parseOnLoad: true,
+                async: true,
+                has: {
+                    "dojo-firebug": true,
+                    "dojo-debug-messages": true
+                },
+                packages: [{
+                    name: 'jquery',
+                    location: '//maps.sa.gov.au/global/kendo/2013_1_514/js',
+                    main: 'jquery.min'
+                }, {
+                    name: 'kendo',
+                    location: '//maps.sa.gov.au/global/kendo/2014_1_318/js',
+                    main: 'kendo.all.min'
+                }]
+            };
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-371870-14']);
+            _gaq.push(['_trackPageview']);
+            (function(){
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <!--script type="text/javascript" src="//maps.sa.gov.au/arcgis_js_api/library/3.8/3.8compact">
+        </script-->
+        <script src="https://apps.geohub.sa.gov.au/ArcGISJSApis/3.29/3.29compact/init.js"></script>
+        <script type="text/javascript">
+            define.amd.jQuery = true;
+
+            function isTouchDevice(){
+                return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
+            }
+
+            require(["jquery", "kendo", "dojo/domReady!"], function(jquery, kendo2014){
+                $(document).ready(function(){
+                    var getFiles = function(url){
+                        return $.ajax({
+                            url: url,
+                            success: null,
+                            dataType: "script",
+                            error: function(xhr, textStatus, errorStatus){
+                                console.log("script failed to load - URL " + url + " , error" + xhr + " : " + textStatus + " | " + errorStatus);
+                            }
+                        });
+                    };
+
+                    if (isTouchDevice()) {
+                        $.when(getFiles('js/jquery.mobile.custom.min.js')).done(function(){
+                            try {
+                                $.event.special.tap.emitTapOnTaphold = false;
+                                console.log("loaded mobile scripts");
+                            }
+                            catch (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+
+                    $.when(getFiles('Utilities/js/CIModel.js'), getFiles('js/main.js'), getFiles('js/routing.js'), getFiles('js/bootstrap.min.js'), getFiles('config/config.js'), getFiles('widgets/mapNavigator/js/mapNavigator.js'), getFiles('widgets/bootstrapTour/js/bootstro.min.js'), getFiles('widgets/locationList/js/locationList.js'), getFiles('widgets/alertList/js/alertList.js'), getFiles('widgets/routePanel/js/routePanel.js'), getFiles('widgets/search/js/search.js'), getFiles('widgets/search/js/stopMarker.js'), getFiles('widgets/elevation/js/elevation.js'), getFiles('widgets/favourites/js/favourites.js'), getFiles('widgets/options/js/options.js'), getFiles('widgets/help/js/help.js'), getFiles('widgets/print/js/print.js'), getFiles('widgets/exporter/js/exporter.js'), getFiles('widgets/fastClick/js/fastClick.min.js'), getFiles('Utilities/js/SuggestedRides.js'), getFiles('widgets/pageslide/js/cssAnimate.js'), getFiles('widgets/pageslide/js/pageslide.js')).done(function(){
+                        console.log("loaded config scripts");
+                        try {
+                            var $bar = $('#loadingBar');
+                            $bar.width($bar.width() + 40);
+                            Main.init();
+                        }
+                        catch (e) {
+                            console.log(e);
+                            dojo.addOnLoad(Main.init);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
